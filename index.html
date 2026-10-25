@@ -1,0 +1,401 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PT. Zeea | Sistem Inventaris Aset</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <div class="brand-logo">Z</div>
+        <div>
+          <h2>PT. Zeea</h2>
+          <p>Asset Management</p>
+        </div>
+      </div>
+
+      <div class="menu-label">MENU UTAMA</div>
+      <nav class="navigation">
+        <button class="nav-link active" data-page="dashboard">
+          <span class="nav-icon">⌂</span> Dashboard
+        </button>
+        <button class="nav-link" data-page="assets">
+          <span class="nav-icon">▤</span> Data Aset
+        </button>
+        <button class="nav-link" data-page="disposal">
+          <span class="nav-icon">⇥</span> Disposal
+        </button>
+        <button class="nav-link" data-page="damaged">
+          <span class="nav-icon">⚠</span> Aset Rusak
+        </button>
+        <button class="nav-link" data-page="categories">
+          <span class="nav-icon">▦</span> Kategori
+        </button>
+      </nav>
+
+      <div class="sidebar-bottom">
+        <div class="sidebar-note">
+          <div class="note-icon">✦</div>
+          <strong>Kelola aset lebih mudah</strong>
+          <p>Pantau kondisi dan masa manfaat aset perusahaan dalam satu tempat.</p>
+        </div>
+        <div class="user-profile">
+          <div class="avatar">Z</div>
+          <div>
+            <strong>Administrator</strong>
+            <span>PT. Zeea</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="mobile-menu" id="mobile-menu" aria-label="Buka menu">☰</button>
+          <div>
+            <div class="breadcrumb">PT. Zeea <span>/</span> <span id="breadcrumb-current">Dashboard</span></div>
+            <h1 id="page-title">Dashboard</h1>
+          </div>
+        </div>
+        <div class="topbar-right">
+          <div class="date-chip"><span>◷</span> <span id="current-date">Memuat tanggal...</span></div>
+          <div class="top-avatar">Z</div>
+        </div>
+      </header>
+
+      <div id="alert-area" class="alert-area" aria-live="polite"></div>
+
+      <!-- DASHBOARD -->
+      <section class="page-section active" id="page-dashboard">
+        <div class="welcome-banner">
+          <div>
+            <span class="eyebrow">RINGKASAN INVENTARIS</span>
+            <h2>Selamat datang di <span>PT. Zeea</span> 👋</h2>
+            <p>Pantau aset perusahaan, kondisi barang, dan masa manfaatnya dengan mudah.</p>
+          </div>
+          <div class="welcome-art" aria-hidden="true">
+            <div class="art-circle">Z</div>
+            <div class="art-sparkle sparkle-one">✦</div>
+            <div class="art-sparkle sparkle-two">✧</div>
+          </div>
+        </div>
+
+        <div class="section-heading">
+          <div>
+            <h2>Ringkasan Aset</h2>
+            <p>Informasi terkini dari inventaris perusahaan.</p>
+          </div>
+          <button class="btn btn-primary" data-open-page="assets">＋ Tambah Aset</button>
+        </div>
+
+        <div class="stats-grid">
+          <article class="stat-card stat-purple">
+            <div class="stat-top"><span>Total Aset</span><span class="stat-icon">▤</span></div>
+            <strong id="total-aset">0</strong>
+            <small>Seluruh aset tercatat</small>
+          </article>
+          <article class="stat-card stat-green">
+            <div class="stat-top"><span>Masih Bisa Dipakai</span><span class="stat-icon">✓</span></div>
+            <strong id="total-bisa-dipakai">0</strong>
+            <small>Aset dengan kondisi baik</small>
+          </article>
+          <article class="stat-card stat-orange">
+            <div class="stat-top"><span>Aset Rusak</span><span class="stat-icon">⚠</span></div>
+            <strong id="total-rusak">0</strong>
+            <small>Perlu pemeriksaan</small>
+          </article>
+          <article class="stat-card stat-blue">
+            <div class="stat-top"><span>Sudah Dilepas</span><span class="stat-icon">⇥</span></div>
+            <strong id="total-sudah-dilepas">0</strong>
+            <small>Aset berstatus disposal</small>
+          </article>
+          <article class="stat-card stat-pink">
+            <div class="stat-top"><span>Total Kategori</span><span class="stat-icon">▦</span></div>
+            <strong id="total-kategori">0</strong>
+            <small>Kategori inventaris</small>
+          </article>		  
+		<article class="stat-card stat-teal">
+		  <div class="stat-top">
+			<span>Total Nilai Aset</span>
+			<span class="stat-icon">Rp</span>
+		  </div>
+		  <strong id="total-nilai-aset">Rp0</strong>
+		  <small>Total harga perolehan seluruh aset</small>
+		</article>
+        </div>
+
+        <div class="dashboard-grid">
+          <section class="panel">
+            <div class="panel-heading">
+              <div>
+                <h3>Pengingat Masa Manfaat</h3>
+                <p>Perkiraan akhir masa manfaat berdasarkan tanggal perolehan.</p>
+              </div>
+              <span class="heading-icon">◷</span>
+            </div>
+            <div class="table-wrapper">
+              <table id="expiry-table">
+                <thead>
+                  <tr>
+                    <th>Kode Aset</th>
+                    <th>Nama Aset</th>
+                    <th>Akhir Masa Manfaat</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="expiry-table-body">
+                  <tr><td colspan="4" class="empty-state">Memuat data aset...</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="table-note">Pengingat ditampilkan untuk semua aset yang belum berstatus disposal.</p>
+          </section>
+
+          <section class="panel quick-panel">
+            <div class="panel-heading">
+              <div>
+                <h3>Akses Cepat</h3>
+                <p>Pilih menu untuk mengelola inventaris.</p>
+              </div>
+            </div>
+            <button class="quick-action" data-open-page="assets">
+              <span class="quick-icon purple-icon">▤</span>
+              <span><strong>Data Aset</strong><small>Lihat dan kelola aset</small></span>
+              <span class="quick-arrow">›</span>
+            </button>
+            <button class="quick-action" data-open-page="disposal">
+              <span class="quick-icon blue-icon">⇥</span>
+              <span><strong>Disposal</strong><small>Catat aset yang dilepas</small></span>
+              <span class="quick-arrow">›</span>
+            </button>
+            <button class="quick-action" data-open-page="damaged">
+              <span class="quick-icon orange-icon">⚠</span>
+              <span><strong>Aset Rusak</strong><small>Periksa aset bermasalah</small></span>
+              <span class="quick-arrow">›</span>
+            </button>
+            <button class="quick-action" data-open-page="categories">
+              <span class="quick-icon pink-icon">▦</span>
+              <span><strong>Kategori</strong><small>Kelola kategori aset</small></span>
+              <span class="quick-arrow">›</span>
+            </button>
+          </section>
+        </div>
+      </section>
+
+      <!-- DATA ASET -->
+      <section class="page-section" id="page-assets">
+        <div class="section-heading">
+          <div>
+            <h2>Data Aset</h2>
+            <p>Daftar aset milik PT. Zeea.</p>
+          </div>
+          <button class="btn btn-primary" id="add-asset-btn">＋ Tambah Aset</button>
+        </div>
+        <div class="panel">
+          <div class="toolbar">
+            <input type="search" id="asset-search" placeholder="Cari kode atau nama aset...">
+            <select id="asset-filter">
+              <option value="">Semua kondisi</option>
+              <option value="Baik">Baik</option>
+              <option value="Rusak">Rusak</option>
+              <option value="Disposal">Disposal</option>
+            </select>
+          </div>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Kode</th><th>Nama Aset</th><th>Kategori</th><th>Tanggal Perolehan</th>
+                  <th>Kondisi</th><th>Lokasi</th><th>Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="assets-table-body">
+                <tr><td colspan="7" class="empty-state">Memuat data...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- DISPOSAL -->
+      <section class="page-section" id="page-disposal">
+        <div class="section-heading">
+          <div>
+            <h2>Disposal Aset</h2>
+            <p>Riwayat aset yang telah dilepas dari inventaris.</p>
+          </div>
+          <button class="btn btn-primary" id="add-disposal-btn">＋ Catat Disposal</button>
+        </div>
+        <div class="panel">
+          <div class="toolbar">
+            <input type="search" id="disposal-search" placeholder="Cari aset atau alasan disposal...">
+          </div>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr><th>Kode</th><th>Nama Aset</th><th>Tanggal Disposal</th><th>Alasan</th><th>Nilai Jual</th></tr>
+              </thead>
+              <tbody id="disposal-table-body">
+                <tr><td colspan="5" class="empty-state">Memuat data...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ASET RUSAK -->
+      <section class="page-section" id="page-damaged">
+        <div class="section-heading">
+          <div>
+            <h2>Aset Rusak</h2>
+            <p>Aset yang membutuhkan perbaikan atau tindak lanjut.</p>
+          </div>
+          <button class="btn btn-primary" data-open-page="assets">＋ Kelola Data Aset</button>
+        </div>
+        <div class="panel">
+          <div class="toolbar">
+            <input type="search" id="damaged-search" placeholder="Cari aset rusak...">
+          </div>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr><th>Kode</th><th>Nama Aset</th><th>Kategori</th><th>Lokasi</th><th>Keterangan</th><th>Aksi</th></tr>
+              </thead>
+              <tbody id="damaged-table-body">
+                <tr><td colspan="6" class="empty-state">Memuat data...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- KATEGORI -->
+      <section class="page-section" id="page-categories">
+        <div class="section-heading">
+          <div>
+            <h2>Kategori Aset</h2>
+            <p>Kelompokkan aset agar lebih mudah dikelola.</p>
+          </div>
+          <button class="btn btn-primary" id="add-category-btn">＋ Tambah Kategori</button>
+        </div>
+        <div class="category-grid" id="category-grid">
+          <div class="empty-card">Memuat kategori...</div>
+        </div>
+      </section>
+
+      <footer class="footer">© <span id="footer-year"></span> PT. Zeea · Sistem Inventarisasi Aset</footer>
+    </main>
+  </div>
+
+  <!-- MODAL ASET -->
+  <div class="modal-backdrop" id="asset-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <div><h2 id="asset-modal-title">Tambah Aset</h2><p>Isi informasi aset dengan benar.</p></div>
+        <button class="modal-close" data-close-modal="asset-modal" aria-label="Tutup">×</button>
+      </div>
+      <form id="asset-form">
+        <input type="hidden" id="asset-id">
+        <div class="form-grid">
+          <label>Kode Aset *<input id="asset-code" required placeholder="Contoh: AST-001"></label>
+          <label>Nama Aset *<input id="asset-name" required placeholder="Nama barang"></label>
+          <label>Kategori *
+            <select id="asset-category" required><option value="">Pilih kategori</option></select>
+          </label>
+          <label>Tanggal Perolehan *<input id="asset-date" type="date" required></label>
+          <label>Harga Perolehan (Rp)<input id="asset-price" type="number" min="0" value="0"></label>
+          <label>Masa Manfaat (tahun)<input id="asset-life" type="number" min="1" value="5" required></label>
+          <label>Kondisi
+            <select id="asset-condition">
+              <option value="Baik">Baik</option>
+              <option value="Rusak">Rusak</option>
+              <option value="Disposal">Disposal</option>
+            </select>
+          </label>
+          <label>Lokasi<input id="asset-location" placeholder="Contoh: Ruang Admin"></label>
+          <label class="full-width">Keterangan<textarea id="asset-notes" rows="3" placeholder="Catatan tambahan (opsional)"></textarea></label>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-light" data-close-modal="asset-modal">Batal</button>
+          <button type="submit" class="btn btn-primary" id="save-asset-btn">Simpan Aset</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL KATEGORI -->
+  <div class="modal-backdrop" id="category-modal">
+    <div class="modal modal-small">
+      <div class="modal-header">
+        <div><h2>Tambah Kategori</h2><p>Buat kategori aset baru.</p></div>
+        <button class="modal-close" data-close-modal="category-modal" aria-label="Tutup">×</button>
+      </div>
+      <form id="category-form">
+        <label>Nama Kategori *<input id="category-name" required placeholder="Contoh: Elektronik"></label>
+        <label>Deskripsi<textarea id="category-description" rows="3" placeholder="Deskripsi kategori (opsional)"></textarea></label>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-light" data-close-modal="category-modal">Batal</button>
+          <button type="submit" class="btn btn-primary">Simpan Kategori</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL DISPOSAL -->
+  <div class="modal-backdrop" id="disposal-modal">
+    <div class="modal modal-small">
+      <div class="modal-header">
+        <div><h2>Catat Disposal</h2><p>Catat aset yang telah dilepas.</p></div>
+        <button class="modal-close" data-close-modal="disposal-modal" aria-label="Tutup">×</button>
+      </div>
+      <form id="disposal-form">
+        <label>Pilih Aset *
+          <select id="disposal-asset" required><option value="">Pilih aset</option></select>
+        </label>
+        <label>Tanggal Disposal *<input id="disposal-date" type="date" required></label>
+        <label>Alasan Disposal *<textarea id="disposal-reason" rows="3" required placeholder="Contoh: Rusak berat, dijual, atau tidak digunakan"></textarea></label>
+        <label>Nilai Jual (Rp)<input id="disposal-value" type="number" min="0" value="0"></label>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-light" data-close-modal="disposal-modal">Batal</button>
+          <button type="submit" class="btn btn-primary">Simpan Disposal</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL PERBAIKAN ASET -->
+  <div class="modal-backdrop" id="condition-modal">
+    <div class="modal modal-small">
+      <div class="modal-header">
+        <div><h2>Perbarui Kondisi</h2><p>Ubah status kondisi aset.</p></div>
+        <button class="modal-close" data-close-modal="condition-modal" aria-label="Tutup">×</button>
+      </div>
+      <form id="condition-form">
+        <input type="hidden" id="condition-asset-id">
+        <label>Nama Aset<input id="condition-asset-name" disabled></label>
+        <label>Kondisi Baru *
+          <select id="condition-new-value" required>
+            <option value="Baik">Baik</option>
+            <option value="Rusak">Rusak</option>
+          </select>
+        </label>
+        <label>Keterangan<textarea id="condition-notes" rows="3" placeholder="Catatan pemeriksaan (opsional)"></textarea></label>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-light" data-close-modal="condition-modal">Batal</button>
+          <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</body>
+</html>
