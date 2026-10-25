@@ -2,6 +2,8 @@
 
 Aplikasi web Sistem Inventarisasi dan Pelepasan Aset Kantor PT. Zeea yang digunakan untuk mencatat, mengelola, dan memantau kondisi aset perusahaan. Aplikasi menggunakan HTML, CSS, dan JavaScript pada frontend serta Supabase PostgreSQL sebagai database.
 
+Demo web: https://faarizaafifaah.github.io/Sistem-Aset-Kantor/
+
 ## 1. Fitur Aplikasi
 
 - **Dashboard:** menampilkan ringkasan jumlah aset, kategori, aset rusak, disposal, dan total nilai aset.
