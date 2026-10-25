@@ -1,14 +1,14 @@
 # PT. Zeea — Asset Management System
 
-Aplikasi web sederhana untuk mengelola inventarisasi dan pelepasan aset kantor PT. Zeea. Aplikasi menggunakan HTML, CSS, dan JavaScript dengan Supabase sebagai database.
+Aplikasi web Sistem Inventarisasi dan Pelepasan Aset Kantor PT. Zeea yang digunakan untuk mencatat, mengelola, dan memantau kondisi aset perusahaan. Aplikasi menggunakan HTML, CSS, dan JavaScript pada frontend serta Supabase PostgreSQL sebagai database.
 
 ## 1. Fitur Aplikasi
 
-- **Dashboard:** menampilkan ringkasan jumlah aset, aset baik, aset rusak, dan total nilai aset.
-- **Data Aset:** melihat, menambah, mengedit, mencari, dan menghapus data aset.
-- **Disposal:** mencatat pelepasan aset perusahaan.
-- **Aset Rusak:** menampilkan aset yang mengalami kerusakan.
-- **Kategori:** mengelola kategori aset perusahaan.
+- **Dashboard:** menampilkan ringkasan jumlah aset, kategori, aset rusak, disposal, dan total nilai aset.
+- **Data Aset:** mengelola informasi aset perusahaan.
+- **Disposal:** mencatat proses pelepasan aset perusahaan.
+- **Aset Rusak:** menampilkan aset dengan kondisi rusak.
+- **Kategori:** mengelola kategori aset.
 
 ## 2. Teknologi yang Digunakan
 
@@ -18,114 +18,96 @@ Aplikasi web sederhana untuk mengelola inventarisasi dan pelepasan aset kantor P
 - Supabase JavaScript Client v2
 - Supabase PostgreSQL
 
-## 3. Struktur File
+## 3. Struktur Folder
 
 ```text
 PT-Zeea/
-├── PT_Zeea_Asset_Management.html
+├── backend/
+│   ├── app.js
+│   └── database.sql
+│
+├── frontend/
+│   ├── index.html
+│   ├── style.css
+│   └── script.js
+│
 └── README.md
 ```
 
-File HTML berisi kode tampilan, styling CSS, dan JavaScript aplikasi dalam satu file agar mudah diedit menggunakan Notepad++.
+### Fungsi setiap file
 
-## 4. Persiapan dan Instalasi
+**Folder `backend`**
 
-1. Pastikan sudah memiliki project Supabase.
-2. Buka project Supabase yang digunakan oleh aplikasi.
-3. Ambil Project URL dan anon/publishable key dari pengaturan API Supabase.
-4. Buka file `PT_Zeea_Asset_Management.html` menggunakan Notepad++.
-5. Cari konfigurasi `SUPABASE_URL` dan `SUPABASE_ANON_KEY`.
-6. Pastikan URL dan key sesuai dengan project Supabase yang digunakan.
-7. Simpan perubahan dan buka file HTML menggunakan browser.
-8. Pastikan perangkat terhubung ke internet agar library Supabase dari CDN dapat dimuat.
+- `app.js` — berisi konfigurasi atau logika backend yang diperlukan aplikasi.
+- `database.sql` — berisi perintah SQL untuk struktur dan pengelolaan database PostgreSQL di Supabase.
 
-**Catatan keamanan:** jangan pernah memasukkan `service_role` key atau secret key ke dalam file HTML/JavaScript yang dapat diakses pengguna.
+**Folder `frontend`**
+
+- `index.html` — struktur halaman dan komponen aplikasi.
+- `style.css` — mengatur tampilan, warna, tata letak, dan responsivitas aplikasi.
+- `script.js` — mengatur interaksi pengguna, pengambilan data, serta operasi tambah, baca, ubah, dan hapus data melalui Supabase.
+
+## 4. Persiapan Aplikasi
+
+1. Siapkan project Supabase yang sudah digunakan.
+2. Pastikan tabel database yang dibutuhkan aplikasi tersedia.
+3. Buka file `frontend/script.js`.
+4. Periksa konfigurasi `SUPABASE_URL` dan `SUPABASE_ANON_KEY`.
+5. Isi URL dan anon/publishable key sesuai project Supabase milik kamu.
+6. Simpan perubahan.
+7. Buka `frontend/index.html` menggunakan browser dengan koneksi internet.
+
+**Catatan:** gunakan project Supabase yang sudah ada. Jangan membuat project baru atau menjalankan SQL yang membuat ulang maupun menghapus tabel yang sudah memiliki data.
 
 ## 5. Database
 
-Aplikasi menggunakan tiga tabel utama:
+Database menggunakan PostgreSQL melalui Supabase. Tabel utama aplikasi meliputi:
 
-### Tabel `aset`
+- `aset` — menyimpan data inventaris aset.
+- `kategori` — menyimpan kategori aset.
+- `disposal` — menyimpan catatan pelepasan aset.
 
-Kolom yang diharapkan oleh kode saat ini:
-
-- `id`
-- `kode_aset`
-- `nama_aset`
-- `kategori_id`
-- `lokasi`
-- `tanggal_perolehan`
-- `harga_perolehan`
-- `masa_manfaat_tahun`
-- `kondisi`
-- `status`
-
-### Tabel `kategori`
-
-Kolom yang diharapkan:
-
-- `id`
-- `nama_kategori`
-- `keterangan`
-
-### Tabel `disposal`
-
-Kolom yang diasumsikan oleh formulir saat ini:
-
-- `id`
-- `aset_id`
-- `tanggal_disposal`
-- `alasan`
-- `nilai_jual`
-- `keterangan`
-
-**Penting:** nama tabel dan kolom harus disesuaikan dengan database Supabase yang sebenarnya. Jangan membuat ulang atau menghapus tabel yang sudah ada hanya untuk mengikuti dokumentasi ini.
+Struktur kolom harus mengikuti database yang sudah digunakan aplikasi. Jika ada perubahan struktur, sesuaikan kode JavaScript dengan nama tabel dan kolom yang sebenarnya.
 
 ## 6. Cara Menggunakan
 
-1. Buka aplikasi melalui browser.
-2. Pilih menu Dashboard, Data Aset, Disposal, Aset Rusak, atau Kategori.
-3. Klik tombol Tambah Data pada menu yang sesuai.
-4. Isi formulir dengan data yang benar.
-5. Klik Simpan Data.
-6. Gunakan fitur pencarian untuk menemukan data.
-7. Gunakan tombol Edit atau Hapus jika tersedia.
+1. Jalankan aplikasi dengan membuka `frontend/index.html`.
+2. Pilih menu Dashboard untuk melihat ringkasan inventaris.
+3. Buka Data Aset untuk mengelola data aset.
+4. Buka Disposal untuk mencatat pelepasan aset.
+5. Buka Aset Rusak untuk memeriksa aset yang mengalami kerusakan.
+6. Buka Kategori untuk mengelola pengelompokan aset.
+7. Gunakan fitur pencarian dan formulir yang tersedia untuk mengelola data.
 
 ## 7. Pemecahan Masalah
 
 ### Data tidak muncul
 
-- Periksa koneksi internet.
-- Pastikan Project URL dan key Supabase benar.
-- Periksa nama tabel dan kolom.
-- Periksa kebijakan Row Level Security (RLS).
+- Pastikan URL dan key Supabase sudah benar.
+- Pastikan tabel yang dibutuhkan tersedia.
+- Periksa koneksi internet dan kebijakan Row Level Security (RLS).
 
 ### Data disposal gagal disimpan
 
-- Pastikan tabel `disposal` tersedia.
-- Cocokkan nama kolom dengan konfigurasi JavaScript.
-- Pastikan aset yang dipilih tersedia.
-- Periksa tipe data dan kebijakan RLS untuk operasi `INSERT`.
+- Periksa struktur tabel `disposal`.
+- Pastikan nama kolom pada `script.js` sesuai dengan database.
+- Pastikan tipe data dan relasi aset sudah benar.
+- Periksa izin operasi `INSERT` pada kebijakan RLS.
 
 ### Muncul error HTTP 400
 
-Periksa detail error di Console atau Network pada browser. Error ini dapat terjadi karena nama kolom tidak sesuai, tipe data salah, atau format data yang dikirim tidak valid.
-
-### Muncul peringatan Tracking Prevention
-
-Peringatan ini dapat berkaitan dengan pembatasan penyimpanan oleh browser. Periksa apakah aplikasi masih dapat terhubung ke Supabase. Jika request gagal, periksa juga pesan error dari API Supabase.
+Periksa detail error pada Console atau Network browser. Penyebabnya dapat berupa nama kolom yang tidak sesuai, format data yang salah, atau tipe data yang tidak cocok.
 
 ## 8. Keamanan
 
-- Gunakan anon/publishable key pada frontend.
-- Jangan memasukkan secret key ke dalam kode frontend.
-- Terapkan kebijakan RLS sesuai kebutuhan pengguna.
-- Hindari memberikan izin baca dan tulis kepada semua pengguna tanpa pembatasan.
+- Jangan memasukkan `service_role` key atau secret key ke frontend.
+- Gunakan anon/publishable key untuk koneksi browser.
+- Atur kebijakan RLS agar akses data sesuai dengan hak pengguna.
 - Lakukan backup sebelum mengubah struktur database.
 
 ## 9. Tujuan Proyek
 
-Aplikasi ini bertujuan membantu perusahaan PT. Zeea melakukan pencatatan aset, memantau kondisi aset, mengelompokkan kategori, dan mendokumentasikan proses pelepasan aset secara lebih teratur.
+Aplikasi ini dibuat untuk membantu PT. Zeea mengelola inventaris aset kantor secara lebih terstruktur, memantau kondisi aset, dan mendokumentasikan proses pelepasan aset dalam satu sistem.
 
 ## 10. Lisensi
 
